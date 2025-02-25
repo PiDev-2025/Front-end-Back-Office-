@@ -15,7 +15,7 @@ import Authmiddleware from "./routes/route";
 
 // layouts Format
 import VerticalLayout from "./components/VerticalLayout/";
-import HorizontalLayout from "./components/HorizontalLayout/";
+
 import NonAuthLayout from "./components/NonAuthLayout";
 
 // Import scss
