@@ -65,9 +65,14 @@ const ProfileMenu = (props) => {
             <i className="bx bx-user font-size-16 align-middle me-1" />
             {props.t("Profile")}{" "}
           </DropdownItem>
-          <DropdownItem tag="a" href="/crypto-wallet">
-            <i className="bx bx-wallet font-size-16 align-middle me-1" />
-            {props.t("My Wallet")}
+          <DropdownItem tag="a" href="http://localhost:3000/">
+            <img
+              className="bx bx-wallet font-size-16 align-middle me-1"
+              src="src\assets\images\brands\Parkini_1.png" // Replace this with your image path
+              alt="Parkini Icon"
+              style={{ width: "25px", height: "25px" }} // Optional: Adjust the size
+            />
+            {props.t("Parkini")}
           </DropdownItem>
           <DropdownItem tag="a" href="#">
             <span className="badge bg-success float-end">11</span>
