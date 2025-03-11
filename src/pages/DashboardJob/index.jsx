@@ -5,10 +5,10 @@ import AddedJobs from "./AddedJobs";
 import CandidateSection from "./CandidateSection";
 
 //Import Components
-import ChartSection from "./ChartSection";
+import ChartSection from "../User/ChartSection";
 import JobVacancy from "./JobVacancy";
 import ReceivedTime from "./ReceivedTime";
-import Section from "./Section";
+import Section from "../User/Section";
 import StatisticsApplications from "./StatisticsApplications";
 
 const DashboardJob = () => {

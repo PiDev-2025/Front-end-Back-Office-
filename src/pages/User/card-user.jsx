@@ -36,9 +36,9 @@ const CardUser = () => {
                     </div>
                     <div className="flex-grow-1 align-self-center">
                       <div className="text-muted">
-                        <p className="mb-2">Welcome to Skote Dashboard</p>
-                        <h5 className="mb-1">Henry wells</h5>
-                        <p className="mb-0">UI / UX Designer</p>
+                        <p className="mb-2">Welcome to Parkini Dashboard</p>
+                        <h5 className="mb-1">Yassine Manai</h5>
+                        <p className="mb-0">Dashboard Admin</p>
                       </div>
                     </div>
                   </div>
@@ -50,15 +50,7 @@ const CardUser = () => {
                       <Col xs="4">
                         <div>
                           <p className="text-muted text-truncate mb-2">
-                            Total Projects
-                          </p>
-                          <h5 className="mb-0">48</h5>
-                        </div>
-                      </Col>
-                      <Col xs="4">
-                        <div>
-                          <p className="text-muted text-truncate mb-2">
-                            Projects
+                            Owners
                           </p>
                           <h5 className="mb-0">40</h5>
                         </div>
@@ -71,6 +63,15 @@ const CardUser = () => {
                           <h5 className="mb-0">18</h5>
                         </div>
                       </Col>
+                      <Col xs="4">
+                        <div>
+                          <p className="text-muted text-truncate mb-2">
+                            Employee
+                          </p>
+                          <h5 className="mb-0">18</h5>
+                        </div>
+                      </Col>
+
                     </Row>
                   </div>
                 </Col>

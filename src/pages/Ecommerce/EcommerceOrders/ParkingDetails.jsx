@@ -4,7 +4,7 @@ import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "react
 import img7 from "../../../assets/images/product/img-7.png";
 import img4 from "../../../assets/images/product/img-4.png";
 
-const EcommerceOrdersModal = (props) => {
+const ParkingDetails = (props) => {
   const { isOpen, toggle, transaction = {} } = props;
 
   return (
@@ -57,4 +57,4 @@ EcommerceOrdersModal.propTypes = {
   transaction: PropTypes.object,
 };
 
-export default EcommerceOrdersModal;
+export default ParkingDetails;

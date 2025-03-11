@@ -25,7 +25,7 @@ import {
 //redux
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
-import EcommerceOrdersModal from "./EcommerceOrdersModal";
+import EcommerceOrdersModal from "./ParkingDetails";
 
 import { Button, Col, Row, UncontrolledTooltip, Modal, ModalHeader, ModalBody, Form, Input, FormFeedback, Label, Card, CardBody, FormGroup, Badge } from "reactstrap";
 import { ToastContainer } from "react-toastify";
