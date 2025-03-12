@@ -2,13 +2,13 @@ import React from "react";
 import { Container, Row } from "reactstrap";
 
 //import component
-import CardUser from "./CardUser";
+import CardUser from "../Parking/CardParkingStats";
 import Settings from "./Settings";
-import Posts from "./Posts";
-import Comments from "./Comments";
-import TapVisitors from "./TapVisitors";
-import Activity from "./Activity";
-import PopularPost from "./PopularPost";
+import Posts from "../Parking/Posts";
+import Comments from "../Parking/Comments";
+import TapVisitors from "../Parking/TapParkings";
+import Activity from "../Parking/Activity";
+import PopularPost from "../Parking/ParkingList";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";

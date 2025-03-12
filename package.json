@@ -17,6 +17,7 @@
     "@ckeditor/ckeditor5-build-classic": "40.1.0",
     "@ckeditor/ckeditor5-react": "^6.2.0",
     "@fullcalendar/list": "^6.1.10",
+    "@react-google-maps/api": "^2.20.6",
     "@reduxjs/toolkit": "2.0.1",
     "@tanstack/match-sorter-utils": "^8.8.4",
     "@tanstack/react-table": "^8.10.7",

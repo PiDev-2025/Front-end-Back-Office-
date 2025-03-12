@@ -43,7 +43,13 @@ import { withTranslation } from "react-i18next";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
-import LatestTranactions from "./LatestTranaction";
+import TableUsers from "./TableUsers";
+import ApexRadial from "./ApexRadial";
+import CardUser from "./card-user";
+import Section from "./Section";
+import ChartSection from "./ChartSection";
+import UserGrowth from "./UserGrowth";
+import UserDonutChart from "./UserDonutChart";
 
 const Dashboard = (props) => {
 
@@ -99,12 +105,20 @@ const Dashboard = (props) => {
         <Container fluid>
           {/* Render Breadcrumb */}
           <Breadcrumbs title={props.t("Dashboards")} breadcrumbItem={props.t("Dashboard Users")} />
-
+         <Section />
+         <ChartSection />
+      
           <Row>
             <Col lg="12">
-              <LatestTranactions />
+              <TableUsers />
             </Col>
           </Row>
+          <Row>
+            <UserGrowth dataColors='["--bs-primary"]' />
+
+            <UserDonutChart dataColors='["--bs-primary", "--bs-success", "--bs-danger"]' />
+          </Row>
+        
         </Container>
       </div>
 
