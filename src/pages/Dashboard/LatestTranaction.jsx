@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Badge, Button, Card, CardBody, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from "reactstrap";
+import { Badge, Button, Card, CardBody, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, ListGroup, ListGroupItem } from "reactstrap";
 import TableContainer from "../../components/Common/TableContainer";
 import EcommerceOrdersModal from "../Ecommerce/EcommerceOrders/EcommerceOrdersModal";
 
@@ -88,8 +88,8 @@ const LatestTranaction = () => {
       .then(data => {
         console.log("Success:", data);
         // Make sure we're getting the user object in the response
-        if (data.user) {
-          setUsers([...users, data.user]);
+        if (data) {
+          setUsers([...users, data]);
           toggleAddUserModal();
           alert("User created successfully!");
         } else {
@@ -217,7 +217,41 @@ const LatestTranaction = () => {
 
   return (
     <React.Fragment>
-      <EcommerceOrdersModal isOpen={modal1} toggle={toggleViewModal} transaction={transaction || {}} />
+      <Modal isOpen={modal1} toggle={toggleViewModal} centered>
+        <ModalHeader toggle={toggleViewModal}>User Details</ModalHeader>
+        <ModalBody>
+          {transaction ? (
+            <div className="p-3">
+              <ListGroup>
+                <ListGroupItem>
+                  <strong>Name:</strong> {transaction.name}
+                </ListGroupItem>
+                <ListGroupItem>
+                  <strong>Email:</strong> {transaction.email}
+                </ListGroupItem>
+                <ListGroupItem>
+                  <strong>Phone:</strong> {transaction.phone}
+                </ListGroupItem>
+                <ListGroupItem>
+                  <strong>Role:</strong> {transaction.role}
+                </ListGroupItem>
+                {transaction.role === "Driver" && (
+                  <ListGroupItem>
+                    <strong>Vehicle Type:</strong> {transaction.vehicleType}
+                  </ListGroupItem>
+                )}
+              </ListGroup>
+            </div>
+          ) : (
+              <p>No user selected.</p>
+          )}
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={toggleViewModal}>Close</Button>
+        </ModalFooter>
+      </Modal>
+
+
 
       {/* Add User Modal */}
       <Modal isOpen={addUserModal} toggle={toggleAddUserModal}>
