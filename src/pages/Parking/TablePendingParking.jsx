@@ -34,8 +34,7 @@ const TablePendingParking = () => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZDBiY2U2NWZlMTMyZmUxMDI3NjRiZiIsIm5hbWUiOiJBZG1pbiB5YXNzaW5lIiwiZW1haWwiOiJ5YXNzb250YTIwMDFAZ21haWwuY29tIiwiaWF0IjoxNzQxNzMzMjM4LCJleHAiOjE3NDIzMzgwMzh9.oLJGdl_KIjc2iFugXnnJT-eSQTYd_j0DFC5cOFcL2v0`,
-      },
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZDEyMGFmZDA5OGZjNTM5ZjEzOTM2NiIsIm5hbWUiOiJBZG1pbiIsImVtYWlsIjoiamFsbG91bGlheW1lbjk3QGdtYWlsLmNvbSIsImlhdCI6MTc0MTc2MjUzNiwiZXhwIjoxNzQyMzY3MzM2fQ.pxjhp1IzPPcSdaIO-BPBcq-tXmRVQmvEClsbejjmKp0`,      },
       body: JSON.stringify({ status: "accepted" }),
     })
       .then(response => response.json())
@@ -47,22 +46,22 @@ const TablePendingParking = () => {
 
   // Delete parking request
   const handleDeleteParking = (parkingId) => {
-    if (!isAdmin()) {
-      alert("You don't have permission to perform this action.");
-      return;
-    }
+    
 
-    fetch(`http://localhost:3001/parkings/delete/${parkingId}`, {
-      method: "DELETE",
+    fetch(`http://localhost:3001/parkings/requests/${parkingId}`, {
+      method: "PUT",
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
+        "Content-Type": "application/json",
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZDEyMGFmZDA5OGZjNTM5ZjEzOTM2NiIsIm5hbWUiOiJBZG1pbiIsImVtYWlsIjoiamFsbG91bGlheW1lbjk3QGdtYWlsLmNvbSIsImlhdCI6MTc0MTc2MjUzNiwiZXhwIjoxNzQyMzY3MzM2fQ.pxjhp1IzPPcSdaIO-BPBcq-tXmRVQmvEClsbejjmKp0`,      },
+      body: JSON.stringify({ status: "rejected" }),
     })
+      .then(response => response.json())
       .then(() => {
         setPendingParkings(pendingParkings.filter(parking => parking._id !== parkingId));
       })
-      .catch(error => console.error("Error deleting parking:", error));
+      .catch(error => console.error("Error rejecting parking:", error));
   };
+
 
   const columns = useMemo(() => [
     { header: "Parking Name", accessorKey: "name" },
@@ -91,7 +90,7 @@ const TablePendingParking = () => {
             Accept
           </Button>
           <Button color="danger" className="btn-sm" onClick={() => handleDeleteParking(cellProps.row.original._id)}>
-            Delete
+            Reject
           </Button>
         </div>
       ),
