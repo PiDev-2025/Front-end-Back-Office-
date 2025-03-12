@@ -7,10 +7,10 @@ import CardParkingStats from "./CardParkingStats";
 import ParkingGrowth from "./ParkingGrowth ";
 import Activity from "./Activity";
 import ParkingList from "./ParkingList";
-import Posts from "./Posts";
-import Comments from "./Comments";
+
 import TapParkings from "./TapParkings";
 import TablePendingParking from "./TablePendingParking";
+import MapsGoogle from "./MapsGoogle";
 
 
 
@@ -38,6 +38,7 @@ const Dashboard = () => {
               <TablePendingParking />
             </Col>
           </Row>
+          <MapsGoogle />
 
 
 

@@ -10,7 +10,7 @@ const ParkingGrowth = ({ dataColors }) => {
   const [selectedMonth, setSelectedMonth] = useState("jan");
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/parkings")
+    fetch("http://localhost:3001/parkings/parkings")
       .then((res) => res.json())
       .then((data) => {
         const monthlyGrowth = {};

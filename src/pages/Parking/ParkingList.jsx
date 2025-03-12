@@ -10,6 +10,8 @@ import {
   UncontrolledDropdown,
   Input
 } from "reactstrap";
+import SimpleBar from "simplebar-react"; // Import SimpleBar
+import "simplebar-react/dist/simplebar.min.css"; // Import SimpleBar styles
 
 // Helper function to determine the color based on availability percentage
 const getAvailabilityColor = (availabilityPercentage) => {
@@ -76,65 +78,70 @@ const ParkingList = () => {
               </UncontrolledDropdown>
             </div>
 
-            <div className="table-responsive">
-              <Table className="align-middle table-nowrap mb-0">
-                <thead>
-                  <tr>
-                    <th scope="col">Image</th>
-                    <th scope="col">Parking Name</th>
-                    <th scope="col">Owner</th>
-                    <th scope="col">Disponibility</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredParkings.map((parking, index) => {
-                    const availabilityPercentage = (parking.availableSpots / parking.totalSpots) * 100;
-                    return (
-                      <tr key={index}>
-                        <td style={{ width: "100px" }}>
-                          <img
-                            src={parking.images?.[0] || "https://via.placeholder.com/100"}
-                            alt="Parking"
-                            className="avatar-md h-auto d-block rounded"
-                          />
-                        </td>
-                        <td>
-                          <h5 className="font-size-13 text-truncate mb-1">
-                            <Link to="#" className="text-dark">{parking.name}</Link>
-                          </h5>
-                        </td>
-                        <td>{parking.Owner?.name || "Unknown"}</td>
-                        <td>
-                          <div className="progress" style={{ height: "10px" }}>
-                            <div
-                              className={`progress-bar ${getAvailabilityColor(availabilityPercentage)}`}
-                              role="progressbar"
-                              style={{ width: `${availabilityPercentage}%` }}
-                              aria-valuenow={availabilityPercentage}
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                          </div>
-                        </td>
-                        <td>
-                          <UncontrolledDropdown className="dropdown">
-                            <DropdownToggle className="text-muted font-size-16" tag="a" color="white">
-                              <i className="mdi mdi-dots-horizontal"></i>
-                            </DropdownToggle>
-                            <DropdownMenu className="dropdown-menu-end">
-                              <Link className="dropdown-item" to="#">View</Link>
-                              <Link className="dropdown-item" to="#">Edit</Link>
-                              <Link className="dropdown-item" to="#">Delete</Link>
-                            </DropdownMenu>
-                          </UncontrolledDropdown>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
-            </div>
+            {/* Scrollable Table */}
+            <SimpleBar style={{ maxHeight: "400px" }}>
+              <div className="table-responsive">
+                <Table className="align-middle table-nowrap mb-0">
+                  <thead>
+                    <tr>
+                      <th scope="col">Image</th>
+                      <th scope="col">Parking Name</th>
+                      <th scope="col">Owner</th>
+                      <th scope="col">Disponibility</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredParkings.map((parking, index) => {
+                      const availabilityPercentage = (parking.availableSpots / parking.totalSpots) * 100;
+                      return (
+                        <tr key={index}>
+                          <td style={{ width: "100px" }}>
+                            <img
+                              src={parking.images?.[0] || "https://via.placeholder.com/100"}
+                              alt="Parking"
+                              className="avatar-md h-auto d-block rounded"
+                            />
+                          </td>
+                          <td>
+                            <h5 className="font-size-13 text-truncate mb-1">
+                              <Link to="#" className="text-dark">{parking.name}</Link>
+                            </h5>
+                          </td>
+                          <td>{parking.Owner?.name || "Unknown"}</td>
+                          <td>
+                            <div className="progress" style={{ height: "10px" }}>
+                              <div
+                                className={`progress-bar ${getAvailabilityColor(availabilityPercentage)}`}
+                                role="progressbar"
+                                style={{ width: `${availabilityPercentage}%` }}
+                                aria-valuenow={availabilityPercentage}
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                              ></div>
+                            </div>
+                          </td>
+                          <td>
+                            <UncontrolledDropdown className="dropdown">
+                              <DropdownToggle className="text-muted font-size-16" tag="a" color="white">
+                                <i className="mdi mdi-dots-horizontal"></i>
+                              </DropdownToggle>
+                              <DropdownMenu className="dropdown-menu-end">
+                                <Link className="dropdown-item" to="#">View</Link>
+                                <Link className="dropdown-item" to="#">Edit</Link>
+                                <Link className="dropdown-item" to="#">Delete</Link>
+                              </DropdownMenu>
+                            </UncontrolledDropdown>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              </div>
+            </SimpleBar>
+            {/* End Scrollable Table */}
+
           </CardBody>
         </Card>
       </Col>

@@ -51,7 +51,7 @@ const ParkingDetails = (props) => {
   );
 };
 
-EcommerceOrdersModal.propTypes = {
+ParkingDetails.propTypes = {
   toggle: PropTypes.func,
   isOpen: PropTypes.bool,
   transaction: PropTypes.object,

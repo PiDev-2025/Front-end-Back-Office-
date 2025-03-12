@@ -10,6 +10,8 @@ import {
   Row,
   Progress,
 } from "reactstrap";
+import SimpleBar from "simplebar-react";
+import "simplebar-react/dist/simplebar.min.css"; // Import SimpleBar styles
 
 const TapParkings = () => {
   const [regionData, setRegionData] = useState([]);
@@ -73,7 +75,7 @@ const TapParkings = () => {
 
   return (
     <React.Fragment>
-      <Col xl={4} >
+      <Col xl={4}>
         <Card>
           <CardBody>
             <div className="d-flex flex-wrap align-items-start">
@@ -98,7 +100,7 @@ const TapParkings = () => {
               <Col xs={6}>
                 <div className="mt-3">
                   <p className="text-muted mb-1">Total Parkings</p>
-                  <h5>{regionData.reduce((sum, r) => sum + parseFloat(r.percentage), 0)}%</h5>
+                  <h5>100 %</h5>
                 </div>
               </Col>
 
@@ -116,7 +118,9 @@ const TapParkings = () => {
             </Row>
 
             <hr />
-            <div>
+
+            {/* Scrollable List using SimpleBar */}
+            <SimpleBar style={{ maxHeight: "450px" }}>
               <ul className="list-group list-group-flush">
                 {regionData.map((region, index) => (
                   <li className="list-group-item" key={index}>
@@ -124,7 +128,7 @@ const TapParkings = () => {
                       <h5 className="font-size-14">
                         {region.label} <span className="float-end">{region.percentage}%</span>
                       </h5>
-                      <div className="progress animated-progess progress-sm">
+                      <div className="progress animated-progress progress-sm">
                         <Progress
                           className={`progress-bar bg-${region.color}`}
                           style={{ width: `${region.percentage}%` }}
@@ -134,7 +138,8 @@ const TapParkings = () => {
                   </li>
                 ))}
               </ul>
-            </div>
+            </SimpleBar>
+
           </CardBody>
         </Card>
       </Col>

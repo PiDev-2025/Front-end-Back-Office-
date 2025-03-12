@@ -70,9 +70,9 @@ import TwostepVerification from "../pages/AuthenticationInner/auth-two-step-veri
 import TwostepVerification2 from "../pages/AuthenticationInner/auth-two-step-verification-2";
 
 // // Dashboard
-import Dashboard from "../pages/User/index";
+import Users from "../pages/User/index";
 import DashboardSaas from "../pages/Dashboard-saas/index";
-import DashboardCrypto from "../pages/Parking/index";
+import Parkings from "../pages/Parking/index";
 import Blog from "../pages/Dashboard-Blog/index";
 import DashboardJob from "../pages/DashboardJob/index";
 
@@ -94,7 +94,7 @@ import ChartsKnob from "../pages/Charts/charts-knob";
 import ReCharts from "../pages/Charts/ReCharts";
 
 // // Maps
-import MapsGoogle from "../pages/Maps/MapsGoogle";
+import MapsGoogle from "../pages/Parking/MapsGoogle";
 
 // //Icons
 import IconBoxicons from "../pages/Icons/IconBoxicons";
@@ -178,9 +178,9 @@ import UiProgressbar from "../pages/Ui/UiProgressbar";
 // import UiProgressbar from "../../src/pages/Ui/UiProgressbar"
 
 const authProtectedRoutes = [
-  { path: "/dashboard", component: <Dashboard /> },
+  { path: "/Users", component: <Users /> },
   { path: "/dashboard-saas", component: <DashboardSaas /> },
-  { path: "/dashboard-crypto", component: <DashboardCrypto /> },
+  { path: "/Parkings", component: <Parkings /> },
   { path: "/blog", component: <Blog /> },
   { path: "/dashboard-job", component: <DashboardJob /> },
 

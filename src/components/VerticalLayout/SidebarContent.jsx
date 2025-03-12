@@ -152,23 +152,12 @@ const SidebarContent = (props) => {
               </Link>
               <ul className="sub-menu" aria-expanded="false">
                 <li>
-                  <Link to="/dashboard">{props.t("User")}</Link>
+                  <Link to="/Users">{props.t("User")}</Link>
                 </li>     
                 <li>
-                  <Link to="/dashboard-crypto">{props.t("Parking")}</Link>
+                  <Link to="/Parkings">{props.t("Parking")}</Link>
                 </li>  
-                <li>
-                  <Link to="/dashboard-saas">{props.t("Saas")}</Link>
-                </li>
-               
-                <li>
-                  <Link to="/blog">{props.t("Blog")}</Link>
-                </li>
-                <li>
-                  <Link to="/dashboard-job">
-                    {props.t("Job")}
-                  </Link>
-                </li>   
+              
               </ul>
             </li>
 {/**
@@ -180,6 +169,19 @@ const SidebarContent = (props) => {
                 <span>{props.t("Calendar")}</span>
               </Link>
             </li>
+
+              <li>
+                  <Link to="/dashboard-saas">{props.t("Saas")}</Link>
+                </li>
+               
+                <li>
+                  <Link to="/blog">{props.t("Blog")}</Link>
+                </li>
+                <li>
+                  <Link to="/dashboard-job">
+                    {props.t("Job")}
+                  </Link>
+                </li>   
 
             <li>
               <Link to="/chat" className="">
@@ -734,7 +736,7 @@ const SidebarContent = (props) => {
                 </li>
               </ul>
             </li>
-
+   
             <li>
               <Link to="/#" className="has-arrow ">
                 <i className="bx bx-map"></i>
@@ -771,7 +773,7 @@ const SidebarContent = (props) => {
                 </li>
               </ul>
             </li>
-           */}
+        */}
           </ul>
         </div>
       </SimpleBar>

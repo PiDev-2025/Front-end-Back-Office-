@@ -1,290 +1,118 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Badge, Button, Card, CardBody, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from "reactstrap";
+import { Button, Card, CardBody, Badge } from "reactstrap";
 import TableContainer from "../../components/Common/TableContainer";
-import ParkingDetails from "../Ecommerce/EcommerceOrders/ParkingDetails";
 
 const TablePendingParking = () => {
-  const [users, setUsers] = useState([]);
-  const [modal1, setModal1] = useState(false);
-  const [transaction, setTransaction] = useState(null);
+  const [pendingParkings, setPendingParkings] = useState([]);
 
-  // Add User Modal State
-  const [addUserModal, setAddUserModal] = useState(false);
-  const [newUser, setNewUser] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    role: "Driver",
-    vehicleType: "Moto",
-    password: "default123",
-  });
-
-  // Update User Modal State
-  const [updateUserModal, setUpdateUserModal] = useState(false);
-  const [userToUpdate, setUserToUpdate] = useState({
-    _id: "",
-    name: "",
-    email: "",
-    phone: "",
-    role: "",
-    vehicleType: ""
-  });
-
-  const toggleViewModal = () => setModal1(!modal1);
-  const toggleAddUserModal = () => setAddUserModal(!addUserModal);
-  const toggleUpdateUserModal = () => setUpdateUserModal(!updateUserModal);
-
-  // Fetch all users
+  // Fetch all pending parking requests
   useEffect(() => {
-    fetch("http://localhost:3001/User/users")
+    fetch("http://localhost:3001/parkings/requests", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
       .then(response => response.json())
-      .then(data => setUsers(data))
-      .catch(error => console.error("Error fetching users:", error));
+      .then(data => setPendingParkings(data))
+      .catch(error => console.error("Error fetching pending parkings:", error));
   }, []);
 
-  // Handle form change
-  const handleChange = (e) => {
-    setNewUser({ ...newUser, [e.target.name]: e.target.value });
+  // Function to check user role
+  const isAdmin = () => {
+    const token = localStorage.getItem("authUser");
+    console.log("Token:", token);
+    if (!token) return false;
+
+   
   };
 
-  // Handle update form change
-  const handleUpdateChange = (e) => {
-    setUserToUpdate({ ...userToUpdate, [e.target.name]: e.target.value });
-  };
-
-  // Submit new user
-  const handleAddUser = () => {
-    // Validate that required fields are not empty
-    if (!newUser.name || !newUser.email) {
-      alert("Name and email are required!");
-      return;
-    }
-
-    // Ensure password is set
-    const userToSend = {
-      ...newUser,
-      password: newUser.password || "default123" // Make sure there's a default password
-    };
-
-    console.log("Sending user data:", userToSend); // Debug log
+  // Accept parking request
+  const handleAcceptParking = (parkingId) => {
     
-    fetch("http://localhost:3001/User/users", {
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(userToSend)
-    })
-      .then(response => {
-        console.log("Response status:", response.status);
-        return response.json().then(data => {
-          if (!response.ok) {
-            // For error responses, include the response data in the error
-            throw new Error(data.message || data.error || "Error creating user");
-          }
-          return data;
-        });
-      })
-      .then(data => {
-        console.log("Success:", data);
-        // Make sure we're getting the user object in the response
-        if (data.user) {
-          setUsers([...users, data.user]);
-          toggleAddUserModal();
-          alert("User created successfully!");
-        } else {
-          console.warn("User data not found in response:", data);
-          alert("User created but data not returned properly.");
-        }
-      })
-      .catch(error => {
-        console.error("Error adding user:", error);
-        alert(`Failed to create user: ${error.message}`);
-      });
-  };
 
-  // Open Update Modal with user data
-  const handleUpdateClick = (user) => {
-    setUserToUpdate({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      phone: user.phone,
-      role: user.role,
-      vehicleType: user.vehicleType || ""
-    });
-    toggleUpdateUserModal();
-  };
-
-  // Submit updated user
-  const handleUpdateUser = () => {
-    // Validate that required fields are not empty
-    if (!userToUpdate.name || !userToUpdate.email) {
-      alert("Name and email are required!");
-      return;
-    }
-
-    console.log("Sending updated user data:", userToUpdate); // Debug log
-    
-    fetch(`http://localhost:3001/User/users/${userToUpdate._id}`, {
+    fetch(`http://localhost:3001/parkings/requests/${parkingId}`, {
       method: "PUT",
-      headers: { 
-        "Content-Type": "application/json"
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZDBiY2U2NWZlMTMyZmUxMDI3NjRiZiIsIm5hbWUiOiJBZG1pbiB5YXNzaW5lIiwiZW1haWwiOiJ5YXNzb250YTIwMDFAZ21haWwuY29tIiwiaWF0IjoxNzQxNzMzMjM4LCJleHAiOjE3NDIzMzgwMzh9.oLJGdl_KIjc2iFugXnnJT-eSQTYd_j0DFC5cOFcL2v0`,
       },
-      body: JSON.stringify(userToUpdate)
+      body: JSON.stringify({ status: "accepted" }),
     })
-      .then(response => {
-        console.log("Response status:", response.status);
-        return response.json().then(data => {
-          if (!response.ok) {
-            // For error responses, include the response data in the error
-            throw new Error(data.message || data.error || "Error updating user");
-          }
-          return data;
-        });
+      .then(response => response.json())
+      .then(() => {
+        setPendingParkings(pendingParkings.filter(parking => parking._id !== parkingId));
       })
-      .then(data => {
-        console.log("Success:", data);
-        // Update the users state with the updated user
-        setUsers(users.map(user => 
-          user._id === userToUpdate._id ? data.user || userToUpdate : user
-        ));
-        toggleUpdateUserModal();
-        alert("User updated successfully!");
-      })
-      .catch(error => {
-        console.error("Error updating user:", error);
-        alert(`Failed to update user: ${error.message}`);
-      });
+      .catch(error => console.error("Error accepting parking:", error));
   };
 
-  // Delete user function
-  const handleDeleteUser = (userId) => {
-    fetch(`http://localhost:3001/User/users/${userId}`, {
+  // Delete parking request
+  const handleDeleteParking = (parkingId) => {
+    if (!isAdmin()) {
+      alert("You don't have permission to perform this action.");
+      return;
+    }
+
+    fetch(`http://localhost:3001/parkings/delete/${parkingId}`, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
     })
       .then(() => {
-        setUsers(users.filter(user => user._id !== userId));
+        setPendingParkings(pendingParkings.filter(parking => parking._id !== parkingId));
       })
-      .catch(error => console.error("Error deleting user:", error));
+      .catch(error => console.error("Error deleting parking:", error));
   };
 
   const columns = useMemo(() => [
-    { header: "Name", accessorKey: "name" },
-    { header: "Email", accessorKey: "email" },
+    { header: "Parking Name", accessorKey: "name" },
+    { header: "Owner name", accessorKey: "Owner.name" },
     {
-      header: "Role",
-      accessorKey: "role",
+      header: "Status",
+      accessorKey: "status",
       cell: (cellProps) => (
-        <Badge color={cellProps.row.original.role === "Admin" ? "success" : 
-                      cellProps.row.original.role === "Driver" ? "warning" : "info"}>
-          {cellProps.row.original.role}
+        <Badge color={cellProps.row.original.status === "accepted" ? "success" : "warning"}>
+          {cellProps.row.original.status}
         </Badge>
       ),
     },
-    { 
-      header: "Vehicle Type", 
-      accessorKey: "vehicleType",
+    {
+      header: "Created At",
+      accessorKey: "createdAt",
       cell: (cellProps) => (
-        cellProps.row.original.role === "Driver" ? 
-          <span>{cellProps.row.original.vehicleType || "Not specified"}</span> : 
-          <span>-</span>
-      )
+        <span>{new Date(cellProps.row.original.createdAt).toLocaleString()}</span>
+      ),
     },
-    { header: "Phone", accessorKey: "phone" },
     {
       header: "Actions",
       cell: (cellProps) => (
         <div className="d-flex gap-2">
-          <Button color="primary" className="btn-sm" onClick={() => {
-            if (cellProps.row.original) {
-              setTransaction(cellProps.row.original); 
-              toggleViewModal();
-            }
-          }}>
-            View
+          <Button color="success" className="btn-sm" onClick={() => handleAcceptParking(cellProps.row.original._id)}>
+            Accept
           </Button>
-          <Button color="warning" className="btn-sm" onClick={() => handleUpdateClick(cellProps.row.original)}>
-            Update
-          </Button>
-          <Button color="danger" className="btn-sm" onClick={() => handleDeleteUser(cellProps.row.original._id)}>
+          <Button color="danger" className="btn-sm" onClick={() => handleDeleteParking(cellProps.row.original._id)}>
             Delete
           </Button>
         </div>
       ),
     },
-  ], [users]);
+  ], [pendingParkings]);
 
   return (
-    <React.Fragment>
-      <ParkingDetails isOpen={modal1} toggle={toggleViewModal} transaction={transaction || {}} />
-      
-      
-      {/* Update User Modal */}
-      <Modal isOpen={updateUserModal} toggle={toggleUpdateUserModal}>
-        <ModalHeader toggle={toggleUpdateUserModal}>Update User</ModalHeader>
-        <ModalBody>
-          <Form>
-            <FormGroup>
-              <Label for="name">Name</Label>
-              <Input type="text" name="name" value={userToUpdate.name} onChange={handleUpdateChange} />
-            </FormGroup>
-            <FormGroup>
-              <Label for="email">Email</Label>
-              <Input type="email" name="email" value={userToUpdate.email} onChange={handleUpdateChange} />
-            </FormGroup>
-            <FormGroup>
-              <Label for="phone">Phone</Label>
-              <Input type="text" name="phone" value={userToUpdate.phone} onChange={handleUpdateChange} />
-            </FormGroup>
-            <FormGroup>
-              <Label for="role">Role</Label>
-              <Input type="select" name="role" value={userToUpdate.role} onChange={handleUpdateChange}>
-                <option>Driver</option>
-                <option>Owner</option>
-                <option>Admin</option>
-                <option>Employee</option>
-              </Input>
-            </FormGroup>
-            
-            {/* Conditionally show vehicle type for drivers */}
-            {userToUpdate.role === "Driver" && (
-              <FormGroup>
-                <Label for="vehicleType">Vehicle Type</Label>
-                <Input type="select" name="vehicleType" value={userToUpdate.vehicleType} onChange={handleUpdateChange}>
-                  <option value="Moto">Moto</option>
-                  <option value="Citadine">Citadine</option>
-                  <option value="Berline / Petit SUV">Berline / Petit SUV</option>
-                  <option value="Familiale / Grand SUV">Familiale / Grand SUV</option>
-                  <option value="Utilitaire">Utilitaire</option>
-                </Input>
-              </FormGroup>
-            )}
-          </Form>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={handleUpdateUser}>Update User</Button>
-          <Button color="secondary" onClick={toggleUpdateUserModal}>Cancel</Button>
-        </ModalFooter>
-      </Modal>
-
-      <Card>
-        <CardBody>
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h4 className="card-title">Users List</h4>
-          
-          </div>
-
+    <Card>
+      <CardBody>
+        <h4 className="card-title">Pending Parking Requests</h4>
+        <div style={{ maxHeight: "400px", overflowY: "auto" }}>
           <TableContainer
             columns={columns}
-            data={users}
+            data={pendingParkings}
             isGlobalFilter={false}
             tableClass="align-middle table-nowrap mb-0"
             theadClass="table-light"
           />
-        </CardBody>
-      </Card>
-    </React.Fragment>
+        </div>
+      </CardBody>
+    </Card>
   );
 };
 
