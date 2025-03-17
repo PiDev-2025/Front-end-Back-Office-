@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Badge, Button, Card, CardBody, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from "reactstrap";
+import { Badge, Button, Card, CardBody, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, ListGroup, ListGroupItem } from "reactstrap";
 import TableContainer from "../../components/Common/TableContainer";
-import EcommerceOrdersModal from "../Ecommerce/EcommerceOrders/ParkingDetails";
+
 
 const TableUsers = () => {
   const [users, setUsers] = useState([]);
@@ -88,8 +88,8 @@ const TableUsers = () => {
       .then(data => {
         console.log("Success:", data);
         // Make sure we're getting the user object in the response
-        if (data.user) {
-          setUsers([...users, data.user]);
+        if (data) {
+          setUsers([...users, data]);
           toggleAddUserModal();
           alert("User created successfully!");
         } else {
@@ -217,9 +217,90 @@ const TableUsers = () => {
 
   return (
     <React.Fragment>
-      <EcommerceOrdersModal isOpen={modal1} toggle={toggleViewModal} transaction={transaction || {}} />
-      
-      
+      <Modal isOpen={modal1} toggle={toggleViewModal} centered>
+        <ModalHeader toggle={toggleViewModal}>User Details</ModalHeader>
+        <ModalBody>
+          {transaction ? (
+            <div className="p-3">
+              <ListGroup>
+                <ListGroupItem>
+                  <strong>Name:</strong> {transaction.name}
+                </ListGroupItem>
+                <ListGroupItem>
+                  <strong>Email:</strong> {transaction.email}
+                </ListGroupItem>
+                <ListGroupItem>
+                  <strong>Phone:</strong> {transaction.phone}
+                </ListGroupItem>
+                <ListGroupItem>
+                  <strong>Role:</strong> {transaction.role}
+                </ListGroupItem>
+                {transaction.role === "Driver" && (
+                  <ListGroupItem>
+                    <strong>Vehicle Type:</strong> {transaction.vehicleType}
+                  </ListGroupItem>
+                )}
+              </ListGroup>
+            </div>
+          ) : (
+              <p>No user selected.</p>
+          )}
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={toggleViewModal}>Close</Button>
+        </ModalFooter>
+      </Modal>
+
+
+
+      {/* Add User Modal */}
+      <Modal isOpen={addUserModal} toggle={toggleAddUserModal}>
+        <ModalHeader toggle={toggleAddUserModal}>Add New User</ModalHeader>
+        <ModalBody>
+          <Form>
+            <FormGroup>
+              <Label for="name">Name</Label>
+              <Input type="text" name="name" value={newUser.name} onChange={handleChange} />
+            </FormGroup>
+            <FormGroup>
+              <Label for="email">Email</Label>
+              <Input type="email" name="email" value={newUser.email} onChange={handleChange} />
+            </FormGroup>
+            <FormGroup>
+              <Label for="phone">Phone</Label>
+              <Input type="text" name="phone" value={newUser.phone} onChange={handleChange} />
+            </FormGroup>
+            <FormGroup>
+              <Label for="role">Role</Label>
+              <Input type="select" name="role" value={newUser.role} onChange={handleChange}>
+                <option>Driver</option>
+                <option>Owner</option>
+                <option>Admin</option>
+                <option>Employee</option>
+              </Input>
+            </FormGroup>
+            
+            {/* Conditionally show vehicle type for drivers */}
+            {newUser.role === "Driver" && (
+              <FormGroup>
+                <Label for="vehicleType">Vehicle Type</Label>
+                <Input type="select" name="vehicleType" value={newUser.vehicleType} onChange={handleChange}>
+                  <option value="Moto">Moto</option>
+                  <option value="Citadine">Citadine</option>
+                  <option value="Berline / Petit SUV">Berline / Petit SUV</option>
+                  <option value="Familiale / Grand SUV">Familiale / Grand SUV</option>
+                  <option value="Utilitaire">Utilitaire</option>
+                </Input>
+              </FormGroup>
+            )}
+          </Form>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={handleAddUser}>Add User</Button>
+          <Button color="secondary" onClick={toggleAddUserModal}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
+
       {/* Update User Modal */}
       <Modal isOpen={updateUserModal} toggle={toggleUpdateUserModal}>
         <ModalHeader toggle={toggleUpdateUserModal}>Update User</ModalHeader>
@@ -272,7 +353,7 @@ const TableUsers = () => {
         <CardBody>
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h4 className="card-title">Users List</h4>
-          
+            <Button color="success" onClick={toggleAddUserModal}>+ Add User</Button>
           </div>
 
           <TableContainer
