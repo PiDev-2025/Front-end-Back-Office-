@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Button, Card, CardBody, Badge, Modal, ModalHeader, ModalBody, Row, Col } from "reactstrap";
 import TableContainer from "../../components/Common/TableContainer";
-import { GoogleMap, Marker } from "@react-google-maps/api";
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 const TablePendingParking = () => {
   const [pendingParkings, setPendingParkings] = useState([]);
@@ -25,8 +26,6 @@ const TablePendingParking = () => {
     const token = localStorage.getItem("authUser");
     console.log("Token:", token);
     if (!token) return false;
-
-   
   };
 
   // Accept parking request
@@ -45,25 +44,19 @@ const TablePendingParking = () => {
         return response.json();
       })
       .then(data => {
-        // Mettre à jour l'état local
         setPendingParkings(prevParkings => 
           prevParkings.filter(parking => parking._id !== parkingId)
         );
-        
-        // Afficher un message de succès
         toast.success("Demande de parking acceptée avec succès");
       })
       .catch(error => {
         console.error("Error accepting parking:", error);
-        // Afficher un message d'erreur
         toast.error("Erreur lors de l'acceptation de la demande");
       });
   };
 
   // Delete parking request
   const handleDeleteParking = (parkingId) => {
-    
-
     fetch(`http://localhost:3001/parkings/requests/${parkingId}`, {
       method: "PUT",
       headers: {
@@ -142,10 +135,52 @@ const TablePendingParking = () => {
 
   // Modal content component
   const ParkingDetailsModal = ({ parking, isOpen, toggle }) => {
-    const center = parking?.position ? 
-      { lat: parking.position.lat, lng: parking.position.lng } : 
-      { lat: 36.8065, lng: 10.1815 }; // Default to Tunis
-
+    const mapContainer = useRef(null);
+    const map = useRef(null);
+    
+    // Set mapbox access token
+    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
+    
+    // Initialize map when component mounts
+    useEffect(() => {
+      // Only initialize map when modal is open AND mapContainer.current is available
+      if (!isOpen || !mapContainer.current || map.current) return;
+      
+      const lng = parking?.position?.lng || 10.1815; // Default to Tunis
+      const lat = parking?.position?.lat || 36.8065;
+      
+      // Add small delay to ensure the DOM is fully rendered
+      const timer = setTimeout(() => {
+        try {
+          map.current = new mapboxgl.Map({
+            container: mapContainer.current,
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [lng, lat],
+            zoom: 15
+          });
+          
+          // Add marker
+          new mapboxgl.Marker()
+            .setLngLat([lng, lat])
+            .addTo(map.current);
+            
+          // Add navigation controls
+          map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+        } catch (error) {
+          console.error("Error initializing map:", error);
+        }
+      }, 300); // Small delay to ensure container is available
+      
+      // Clean up map and timer when modal closes
+      return () => {
+        clearTimeout(timer);
+        if (map.current) {
+          map.current.remove();
+          map.current = null;
+        }
+      };
+    }, [isOpen, parking]);
+    
     return (
       <Modal isOpen={isOpen} toggle={toggle} size="lg">
         <ModalHeader toggle={toggle} className="bg-light">
@@ -226,18 +261,10 @@ const TablePendingParking = () => {
             {/* Map */}
             <Col xs="12">
               <h5 className="mb-3">Location</h5>
-              <GoogleMap
-                mapContainerStyle={mapContainerStyle}
-                center={center}
-                zoom={15}
-                options={{ 
-                  streetViewControl: false,
-                  mapTypeControl: false,
-                  fullscreenControl: false
-                }}
-              >
-                <Marker position={center} />
-              </GoogleMap>
+              <div 
+                ref={mapContainer}
+                style={mapContainerStyle}
+              />
             </Col>
           </Row>
         </ModalBody>
