@@ -74,7 +74,7 @@ import Users from "../pages/User/index";
 import DashboardSaas from "../pages/Dashboard-saas/index";
 import Parkings from "../pages/Parking/index";
 import Blog from "../pages/Dashboard-Blog/index";
-import DashboardJob from "../pages/DashboardJob/index";
+import DashboardJob from "../pages/Reservation/index";
 
 // //Crypto
 import CryptoWallet from "../pages/Crypto/CryptoWallet/crypto-wallet";
@@ -182,7 +182,7 @@ const authProtectedRoutes = [
   { path: "/dashboard-saas", component: <DashboardSaas /> },
   { path: "/Parkings", component: <Parkings /> },
   { path: "/blog", component: <Blog /> },
-  { path: "/dashboard-job", component: <DashboardJob /> },
+  { path: "/Reservation", component: <DashboardJob /> },
 
   //   //Crypto
   { path: "/crypto-wallet", component: <CryptoWallet /> },

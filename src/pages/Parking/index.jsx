@@ -38,7 +38,7 @@ const Dashboard = () => {
               <TablePendingParking />
             </Col>
           </Row>
-          <MapsGoogle />
+        
 
 
 
