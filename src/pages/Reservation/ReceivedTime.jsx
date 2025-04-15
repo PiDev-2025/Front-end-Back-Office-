@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardBody, Col, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from 'reactstrap';
-import { ReceivedTimeCharts } from './JobCharts';
+
 
 const ReceivedTime = () => {
     return (
@@ -24,7 +24,7 @@ const ReceivedTime = () => {
                             </UncontrolledDropdown>
                         </div>
 
-                        <ReceivedTimeCharts dataColors='["--bs-primary", "--bs-success", "--bs-warning", "--bs-info"]' />
+                     
                     </CardBody>
                 </Card>
             </Col>

@@ -157,10 +157,15 @@ const SidebarContent = (props) => {
                 <li>
                   <Link to="/Parkings">{props.t("Parking")}</Link>
                 </li>  
+                <li>
+                  <Link to="/Reservation">
+                    {props.t("Reservation")}
+                  </Link>
+                </li>  
               
               </ul>
             </li>
-{/**
+
             <li className="menu-title">{props.t("Apps")}</li>
 
             <li>
@@ -177,11 +182,7 @@ const SidebarContent = (props) => {
                 <li>
                   <Link to="/blog">{props.t("Blog")}</Link>
                 </li>
-                <li>
-                  <Link to="/dashboard-job">
-                    {props.t("Job")}
-                  </Link>
-                </li>   
+                
 
             <li>
               <Link to="/chat" className="">
@@ -675,7 +676,7 @@ const SidebarContent = (props) => {
                     {props.t("Responsive Table")}
                   </Link>
                 </li> */}
-                {/* <li>
+                <li>
                   <Link to="/tables-dragndrop">
                     {props.t("Drag & Drop Table")}
                   </Link>
@@ -773,7 +774,7 @@ const SidebarContent = (props) => {
                 </li>
               </ul>
             </li>
-        */}
+        
           </ul>
         </div>
       </SimpleBar>
