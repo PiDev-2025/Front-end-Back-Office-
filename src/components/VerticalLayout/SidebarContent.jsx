@@ -175,6 +175,8 @@ const SidebarContent = (props) => {
               </Link>
             </li>
 
+
+ {/* 
               <li>
                   <Link to="/dashboard-saas">{props.t("Saas")}</Link>
                 </li>
@@ -675,7 +677,7 @@ const SidebarContent = (props) => {
                   <Link to="/tables-responsive">
                     {props.t("Responsive Table")}
                   </Link>
-                </li> */}
+                </li> 
                 <li>
                   <Link to="/tables-dragndrop">
                     {props.t("Drag & Drop Table")}
@@ -774,7 +776,7 @@ const SidebarContent = (props) => {
                 </li>
               </ul>
             </li>
-        
+            */}
           </ul>
         </div>
       </SimpleBar>
