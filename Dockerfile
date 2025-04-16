@@ -1,24 +1,26 @@
-# Build stage
-FROM node:18 as build
+FROM node:20 AS build
 
+# Set the working directory
 WORKDIR /app
 
-# Copy package files and install dependencies
+# Copy package.json and package-lock.json
 COPY package*.json ./
-RUN npm install
 
-# Copy source files
+# Install dependencies
+RUN npm install --legacy-peer-deps 
+
+
+# Copy the rest of the application code
 COPY . .
-
-ARG REACT_APP_API_URL=http://backend:3001
-ENV REACT_APP_API_URL=$REACT_APP_API_URL
-RUN npm run build
 
 # Build the application
 RUN npm run build
 
+# Expose the port the app runs on
+EXPOSE 5173
 
+# Set environment variable for Vite to bind to all interfaces
+ENV HOST=0.0.0.0
 
-EXPOSE 3000
-
-CMD ["nginx", "-g", "daemon off;"]
+# Start the application
+CMD ["npm", "run", "dev", "--", "--host"]
