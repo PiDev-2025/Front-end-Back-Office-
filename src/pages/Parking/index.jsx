@@ -17,7 +17,7 @@ import MapsGoogle from "./MapsGoogle";
 const Dashboard = () => {
 
   //meta title
-  document.title = "Crypto Dashboard | Skote - Vite React Admin & Dashboard Template";
+  document.title = "Parkini Dashboard";
 
   return (
     <React.Fragment>

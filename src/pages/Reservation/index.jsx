@@ -7,14 +7,14 @@ import AddedJobs from "./AddedJobs";
 //Import Components
 
 import JobVacancy from "./JobVacancy";
-import Section from "../User/Section";
+import Section from "./SectionR";
 import StatisticsApplications from "./StatisticsApplications";
 import ReservationDonutChart from "./ReservationDonutChart";
 import Line from "./peekhours";
 
 const DashboardJob = () => {
 
-  document.title = "Job Dashboard | Skote - React Admin & Dashboard Template";
+  document.title = "Parkini Dashboard";
 
   return (
     <React.Fragment>

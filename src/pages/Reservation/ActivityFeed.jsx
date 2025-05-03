@@ -8,7 +8,7 @@ const ActivityFeed = () => {
 
   useEffect(() => {
     // Step 1: Fetch all reservations
-    fetch("http://localhost:3001/api/reservations")
+    fetch("http://localhost:3001/api/list-all")
       .then((res) => res.json())
       .then(async (reservations) => {
         // Step 2: Fetch each reservation's user info

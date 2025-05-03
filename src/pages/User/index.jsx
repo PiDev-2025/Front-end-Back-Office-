@@ -5,34 +5,13 @@ import {
   Row,
   Col,
   Button,
-  Card,
-  CardBody,
-  Input,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Table,
+  Spinner,
 } from "reactstrap";
-import { Link } from "react-router-dom";
 
-import classNames from "classnames";
-
-//import Charts
-import StackedColumnChart from "./StackedColumnChart";
 
 //import action
 import { getChartsData as onGetChartsData } from "../../store/actions";
 
-import modalimage1 from "../../assets/images/product/img-7.png";
-import modalimage2 from "../../assets/images/product/img-4.png";
-
-// Pages Components
-import WelcomeComp from "./WelcomeComp";
-import MonthlyEarning from "./MonthlyEarning";
-import SocialSource from "./SocialSource";
-import ActivityComp from "./ActivityComp";
-import TopCities from "./TopCities";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
@@ -44,14 +23,78 @@ import { withTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
 import TableUsers from "./TableUsers";
-import ApexRadial from "./ApexRadial";
-import CardUser from "./card-user";
 import Section from "./Section";
 import ChartSection from "./ChartSection";
 import UserGrowth from "./UserGrowth";
 import UserDonutChart from "./UserDonutChart";
 
+import { saveAs } from "file-saver";
+
+const generateAIReport = async (setLoading) => {
+  const API_KEY = "AIzaSyBkIMKoI-5wLl2q7EsznL3rUHnd0EiH7CI";
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+
+  try {
+    setLoading(true);
+
+    // Step 1: Fetch live user data
+    const response = await fetch("http://localhost:3001/User/users");
+    const users = await response.json();
+
+    // Step 2: Calculate statistics
+    const stats = {
+      totalUsers: users.length,
+      owners: users.filter(user => user.role === "Owner").length,
+      employees: users.filter(user => user.role === "Employe").length,
+      drivers: users.filter(user => user.role === "Driver").length,
+    };
+
+    // Step 3: Create a clear prompt
+    const prompt = `Generate a professional summary report for the following user statistics:
+- Total users: ${stats.totalUsers}
+- Owners: ${stats.owners}
+- Employees: ${stats.employees}
+- Drivers: ${stats.drivers}
+
+Please include key insights or observations.`;
+
+    const requestBody = {
+      contents: [
+        {
+          parts: [{ text: prompt }],
+        },
+      ],
+    };
+
+    // Step 4: Send to Gemini API
+    const aiResponse = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    const data = await aiResponse.json();
+
+    if (data.candidates && data.candidates.length > 0) {
+      const text = data.candidates[0].content.parts[0].text;
+      const blob = new Blob([text], { type: "text/plain;charset=utf-8;" });
+      saveAs(blob, "User_Statistics_Report.txt");
+    } else {
+      console.error("Unexpected Gemini response:", data);
+      alert("No content returned from Gemini.");
+    }
+  } catch (err) {
+    console.error("Error generating report:", err);
+    alert("Failed to generate report. See console for details.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 const Dashboard = (props) => {
+  const [loading, setLoading] = useState(false);
 
   const [modal, setmodal] = useState(false);
   const [subscribemodal, setSubscribemodal] = useState(false);
@@ -97,17 +140,21 @@ const Dashboard = (props) => {
   }, [dispatch]);
 
   //meta title
-  document.title = "Dashboard | Skote - Vite React Admin & Dashboard Template";
+  document.title = "Parkini Dashboard";
 
   return (
     <React.Fragment>
       <div className="page-content">
+
         <Container fluid>
           {/* Render Breadcrumb */}
           <Breadcrumbs title={props.t("Dashboards")} breadcrumbItem={props.t("Dashboard Users")} />
-         <Section />
-         <ChartSection />
-      
+
+          <Section />
+        
+        
+          <ChartSection />
+
           <Row>
             <Col lg="12">
               <TableUsers />
@@ -118,11 +165,13 @@ const Dashboard = (props) => {
 
             <UserDonutChart dataColors='["--bs-primary", "--bs-success", "--bs-danger"]' />
           </Row>
-        
+
+
         </Container>
       </div>
 
-   
+
+
     </React.Fragment>
   );
 };

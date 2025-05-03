@@ -162,6 +162,9 @@ const SidebarContent = (props) => {
                     {props.t("Reservation")}
                   </Link>
                 </li>  
+                <li>
+                  <Link to="/Claims">{props.t("Claims")}</Link>
+                </li>
               
               </ul>
             </li>
@@ -174,6 +177,8 @@ const SidebarContent = (props) => {
                 <span>{props.t("Calendar")}</span>
               </Link>
             </li>
+       
+          
 
 
  {/* 

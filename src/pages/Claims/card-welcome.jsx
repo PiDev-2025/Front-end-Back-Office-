@@ -13,13 +13,10 @@ const CardWelcome = () => {
             <Row>
               <Col xs="7">
                 <div className="text-primary p-3">
-                  <h5 className="text-primary">Welcome Back !</h5>
-                  <p>Skote Saas Dashboard</p>
+                  <h5 className="text-primary">Parkini !</h5>
+                  <p>Claim Dashboard</p>
 
-                  <ul className="ps-3 mb-0">
-                    <li className="py-1">7 + Layouts</li>
-                    <li className="py-1">Multiple apps</li>
-                  </ul>
+                  
                 </div>
               </Col>
               <Col xs="5" className="align-self-end">
