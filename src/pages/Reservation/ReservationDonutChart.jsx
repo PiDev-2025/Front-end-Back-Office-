@@ -7,19 +7,19 @@ const ReservationDonutChart = ({ dataColors }) => {
   const chartColors = getChartColorsArray(dataColors);
   const [reservationStats, setReservationStats] = useState({
     total: 0,
-    confirmed: 0,
-    cancelled: 0,
+    pending: 0,
+    rejected: 0,
   });
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/reservations")
+    fetch("http://localhost:3001/api/list-all")
       .then((res) => res.json())
       .then((data) => {
         const total = data.length;
-        const confirmed = data.filter(res => res.status === "Confirmed").length;
-        const cancelled = data.filter(res => res.status === "Cancelled").length;
+        const pending = data.filter(res => res.status === "pending").length;
+        const rejected = data.filter(res => res.status === "rejected").length;
 
-        setReservationStats({ total, confirmed, cancelled });
+        setReservationStats({ total, pending, rejected });
       })
       .catch((error) => console.error("Error fetching reservations:", error));
   }, []);
@@ -28,9 +28,9 @@ const ReservationDonutChart = ({ dataColors }) => {
     ? ((count / reservationStats.total) * 100).toFixed(2)
     : "0.00";
 
-  const series = [reservationStats.confirmed, reservationStats.cancelled];
+  const series = [reservationStats.pending, reservationStats.rejected];
   const options = {
-    labels: ["Confirmed", "Cancelled"],
+    labels: ["pending", "rejected"],
     colors: chartColors,
     legend: { show: true },
     plotOptions: {
@@ -64,20 +64,20 @@ const ReservationDonutChart = ({ dataColors }) => {
                 <Col xs="6">
                   <div className="mt-4">
                     <p className="mb-2 text-truncate">
-                      <i className="mdi mdi-circle text-primary me-1" /> Confirmed
+                      <i className="mdi mdi-circle text-primary me-1" /> pending
                     </p>
                     <h5>
-                      {reservationStats.confirmed} ({getPercentage(reservationStats.confirmed)}%)
+                      {reservationStats.pending} ({getPercentage(reservationStats.pending)}%)
                     </h5>
                   </div>
                 </Col>
                 <Col xs="6">
                   <div className="mt-4">
                     <p className="mb-2 text-truncate">
-                      <i className="mdi mdi-circle text-danger me-1" /> Cancelled
+                      <i className="mdi mdi-circle text-danger me-1" /> rejected
                     </p>
                     <h5>
-                      {reservationStats.cancelled} ({getPercentage(reservationStats.cancelled)}%)
+                      {reservationStats.rejected} ({getPercentage(reservationStats.rejected)}%)
                     </h5>
                   </div>
                 </Col>

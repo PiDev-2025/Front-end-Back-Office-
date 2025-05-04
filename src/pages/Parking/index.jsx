@@ -39,6 +39,10 @@ const Dashboard = () => {
             </Col>
           </Row>
         
+            <Col lg="12">
+              <MapsGoogle />
+            </Col>
+        
 
 
 
