@@ -7,5 +7,8 @@ export default defineConfig({
   esbuild: {
     jsxFactory: 'h',
     jsxFragment: 'Fragment',
+  },
+  build: {
+    outDir: 'build', // Change output directory from 'dist' to 'build'
   }
 })
