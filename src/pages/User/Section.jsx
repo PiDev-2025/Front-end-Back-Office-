@@ -1,142 +1,106 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Link } from 'react-router-dom';
-import { Col, Row } from 'reactstrap';
-import { Badge, Button, Card, CardBody, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from "reactstrap";
+
+import {
+
+    Row,
+    Col,
+    Button,
+    Spinner,
+} from "reactstrap";
 //import images
 import avatar from "../../assets/images/users/avatar-1.jpg";
+import { saveAs } from "file-saver";
+
 
 const Section = () => {
+    const generateAIReport = async (setLoading) => {
+        const API_KEY = "AIzaSyBkIMKoI-5wLl2q7EsznL3rUHnd0EiH7CI";
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
 
+        try {
+            setLoading(true);
 
+            // Step 1: Fetch live user data
+            const response = await fetch("http://localhost:3001/User/users");
+            const users = await response.json();
 
-    // Add User Modal State
-    const [addUserModal, setAddUserModal] = useState(false);
-    const [newUser, setNewUser] = useState({
-        name: "",
-        email: "",
-        phone: "",
-        role: "Driver",
-        vehicleType: "Moto",
-        password: "default123",
-    });
-    const handleAddUser = () => {
-        // Validate that required fields are not empty
-        if (!newUser.name || !newUser.email) {
-            alert("Name and email are required!");
-            return;
-        }
+            // Step 2: Calculate statistics
+            const stats = {
+                totalUsers: users.length,
+                owners: users.filter(user => user.role === "Owner").length,
+                employees: users.filter(user => user.role === "Employe").length,
+                drivers: users.filter(user => user.role === "Driver").length,
+            };
 
-        // Ensure password is set
-        const userToSend = {
-            ...newUser,
-            password: newUser.password || "default123" // Make sure there's a default password
-        };
+            // Step 3: Create a clear prompt
+            const prompt = `Generate a professional summary report for the following user statistics:
+      - Total users: ${stats.totalUsers}
+      - Owners: ${stats.owners}
+      - Employees: ${stats.employees}
+      - Drivers: ${stats.drivers}
+      
+      Please include key insights or observations.`;
 
-        console.log("Sending user data:", userToSend); // Debug log
+            const requestBody = {
+                contents: [
+                    {
+                        parts: [{ text: prompt }],
+                    },
+                ],
+            };
 
-        fetch("http://localhost:3001/User/users", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(userToSend)
-        })
-            .then(response => {
-                console.log("Response status:", response.status);
-                return response.json().then(data => {
-                    if (!response.ok) {
-                        // For error responses, include the response data in the error
-                        throw new Error(data.message || data.error || "Error creating user");
-                    }
-                    return data;
-                });
-            })
-            .then(data => {
-                console.log("Success:", data);
-                // Make sure we're getting the user object in the response
-                if (data.user) {
-                    setUsers([...users, data.user]);
-                    toggleAddUserModal();
-                    alert("User created successfully!");
-                } else {
-                    console.warn("User data not found in response:", data);
-                    alert("User created but data not returned properly.");
-                }
-            })
-            .catch(error => {
-                console.error("Error adding user:", error);
-                alert(`Failed to create user: ${error.message}`);
+            // Step 4: Send to Gemini API
+            const aiResponse = await fetch(endpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(requestBody),
             });
-    };
 
-    // Handle form change
-    const handleChange = (e) => {
-        setNewUser({ ...newUser, [e.target.name]: e.target.value });
+            const data = await aiResponse.json();
+
+            if (data.candidates && data.candidates.length > 0) {
+                const text = data.candidates[0].content.parts[0].text;
+                const blob = new Blob([text], { type: "text/plain;charset=utf-8;" });
+                saveAs(blob, "User_Statistics_Report.txt");
+            } else {
+                console.error("Unexpected Gemini response:", data);
+                alert("No content returned from Gemini.");
+            }
+        } catch (err) {
+            console.error("Error generating report:", err);
+            alert("Failed to generate report. See console for details.");
+        } finally {
+            setLoading(false);
+        }
     };
-    const toggleAddUserModal = () => setAddUserModal(!addUserModal);
+    const [loading, setLoading] = useState(false);
     return (
         <React.Fragment>
-            {/* Add User Modal */}
-            <Modal isOpen={addUserModal} toggle={toggleAddUserModal}>
-                <ModalHeader toggle={toggleAddUserModal}>Add New User</ModalHeader>
-                <ModalBody>
-                    <Form>
-                        <FormGroup>
-                            <Label for="name">Name</Label>
-                            <Input type="text" name="name" value={newUser.name} onChange={handleChange} />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="email">Email</Label>
-                            <Input type="email" name="email" value={newUser.email} onChange={handleChange} />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="phone">Phone</Label>
-                            <Input type="text" name="phone" value={newUser.phone} onChange={handleChange} />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="role">Role</Label>
-                            <Input type="select" name="role" value={newUser.role} onChange={handleChange}>
-                                <option>Driver</option>
-                                <option>Owner</option>
-                                <option>Admin</option>
-                                <option>Employee</option>
-                            </Input>
-                        </FormGroup>
-
-                        {/* Conditionally show vehicle type for drivers */}
-                        {newUser.role === "Driver" && (
-                            <FormGroup>
-                                <Label for="vehicleType">Vehicle Type</Label>
-                                <Input type="select" name="vehicleType" value={newUser.vehicleType} onChange={handleChange}>
-                                    <option value="Moto">Moto</option>
-                                    <option value="Citadine">Citadine</option>
-                                    <option value="Berline / Petit SUV">Berline / Petit SUV</option>
-                                    <option value="Familiale / Grand SUV">Familiale / Grand SUV</option>
-                                    <option value="Utilitaire">Utilitaire</option>
-                                </Input>
-                            </FormGroup>
-                        )}
-                    </Form>
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="primary" onClick={handleAddUser}>Add User</Button>
-                    <Button color="secondary" onClick={toggleAddUserModal}>Cancel</Button>
-                </ModalFooter>
-            </Modal>
 
             <Row className="mb-4">
                 <Col lg={12}>
                     <div className="d-flex align-items-center">
                         <img src={avatar} alt="" className="avatar-sm rounded" />
                         <div className="ms-3 flex-grow-1">
-                            <h5 className="mb-2 card-title">Hello,Yassine Manai</h5>
-                            <p className="text-muted mb-0">Dashboard for admin</p>
+                            <h5 className="mb-2 card-title">User Dashboard </h5>
+                            <p className="text-muted mb-0">View all Users in Parkini</p>
                         </div>
-                        <div>
-                            <Link to="#" onClick={toggleAddUserModal} className="btn btn-primary"><i className="bx bx-plus align-middle"></i> Add New User</Link>
-                        </div>
+                        <div className="text-left mt-4">
+                        <Button
+                            color="primary"
+                            onClick={() => generateAIReport(setLoading)}
+                            disabled={loading}
+                            style={{ padding: "10px 20px", fontSize: "16px" }}
+                        >
+                            {loading ? <Spinner size="sm" /> : "Generate Rapport"}
+                        </Button>
+                    </div>
+
                     </div>
                 </Col>
+               
             </Row>
         </React.Fragment>
     );

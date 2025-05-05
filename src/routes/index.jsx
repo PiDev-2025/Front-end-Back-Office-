@@ -71,10 +71,10 @@ import TwostepVerification2 from "../pages/AuthenticationInner/auth-two-step-ver
 
 // // Dashboard
 import Users from "../pages/User/index";
-import DashboardSaas from "../pages/Dashboard-saas/index";
+import Claims from "../pages/Claims/index";
 import Parkings from "../pages/Parking/index";
 import Blog from "../pages/Dashboard-Blog/index";
-import DashboardJob from "../pages/DashboardJob/index";
+import DashboardJob from "../pages/Reservation/index";
 
 // //Crypto
 import CryptoWallet from "../pages/Crypto/CryptoWallet/crypto-wallet";
@@ -179,10 +179,10 @@ import UiProgressbar from "../pages/Ui/UiProgressbar";
 
 const authProtectedRoutes = [
   { path: "/Users", component: <Users /> },
-  { path: "/dashboard-saas", component: <DashboardSaas /> },
+  { path: "/Claims", component: <Claims /> },
   { path: "/Parkings", component: <Parkings /> },
   { path: "/blog", component: <Blog /> },
-  { path: "/dashboard-job", component: <DashboardJob /> },
+  { path: "/Reservation", component: <DashboardJob /> },
 
   //   //Crypto
   { path: "/crypto-wallet", component: <CryptoWallet /> },
@@ -325,7 +325,7 @@ const authProtectedRoutes = [
 
   //   // this route should be at the end of all other routes
   //   // eslint-disable-next-line react/display-name
-  { path: "/", exact: true, component: <Navigate to="/dashboard" /> },
+  { path: "/", exact: true, component: <Navigate to="/users" /> },
 ];
 
 const publicRoutes = [

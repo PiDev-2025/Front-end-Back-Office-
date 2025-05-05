@@ -2,18 +2,19 @@ import React from "react";
 import { Container, Row } from "reactstrap";
 import ActivityFeed from "./ActivityFeed";
 import AddedJobs from "./AddedJobs";
-import CandidateSection from "./CandidateSection";
+
 
 //Import Components
-import ChartSection from "../User/ChartSection";
+
 import JobVacancy from "./JobVacancy";
-import ReceivedTime from "./ReceivedTime";
-import Section from "../User/Section";
+import Section from "./SectionR";
 import StatisticsApplications from "./StatisticsApplications";
+import ReservationDonutChart from "./ReservationDonutChart";
+import Line from "./peekhours";
 
 const DashboardJob = () => {
 
-  document.title = "Job Dashboard | Skote - React Admin & Dashboard Template";
+  document.title = "Parkini Dashboard";
 
   return (
     <React.Fragment>
@@ -21,21 +22,21 @@ const DashboardJob = () => {
         <Container fluid>
           <Section />
 
-          <ChartSection />
           <Row>
             <StatisticsApplications />
 
-            <CandidateSection />
+            <ReservationDonutChart dataColors='["--bs-primary", "--bs-success", "--bs-danger"]' />
           </Row>
 
-          <Row>
-            <JobVacancy />
-          </Row>
+       
 
           <Row>
-            <ReceivedTime />
+
+           
+              <Line dataColors='["--bs-success"]' />
+         
             <ActivityFeed />
-            <AddedJobs />
+          
           </Row>
         </Container>
       </div>

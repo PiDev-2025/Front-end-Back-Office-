@@ -1,28 +1,29 @@
 import React from "react";
-import { Container, Row, Col } from "reactstrap";
+import { Container, Row, Col, Table } from "reactstrap";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 
 //Import Components
-import CardUser from "../User/card-user";
+import CardUser from "./card-user";
 import CardWelcome from "./card-welcome";
 import MiniWidget from "./mini-widget";
-import Earning from "../User/UserGrowth";
-import SalesAnalytics from "../User/UserDonutChart";
-import TotalSellingProduct from "./total-selling-product";
+import ClaimGrowth from "./ClaimGrowth";
+import TotalClaimsByParking from "./TotalClaimsByParking";
+import TableClaim from "./TableClaim";
 import Tasks from "./tasks";
 import ChatBox from "./chat-box";
 
-const DashboardSaas = () => {
+
+const Claims = () => {
   //meta title
-  document.title = "Saas Dashboard | Skote - Vite React Admin & Dashboard Template";
+  document.title = "Parkini Dashboard";
 
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <Breadcrumbs title="Dashboards" breadcrumbItem="Saas" />
+          <Breadcrumbs title="Dashboards" breadcrumbItem="Claims" />
 
           <CardUser />
 
@@ -37,17 +38,16 @@ const DashboardSaas = () => {
           </Row>
 
           <Row>
-            <Earning dataColors='["--bs-primary"]' />
+            <ClaimGrowth dataColors='["--bs-primary"]' />
 
-            <SalesAnalytics dataColors='["--bs-primary", "--bs-success", "--bs-danger"]' />
+            <TotalClaimsByParking />
+          
           </Row>
 
           <Row>
-            <TotalSellingProduct />
+         
 
-            <Tasks />
-
-            <ChatBox />
+           <TableClaim />
           </Row>
         </Container>
       </div>
@@ -55,4 +55,4 @@ const DashboardSaas = () => {
   );
 };
 
-export default DashboardSaas;
+export default Claims;

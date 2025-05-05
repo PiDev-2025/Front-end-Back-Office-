@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Col, Card, CardBody, Table } from "reactstrap";
 import ReactApexChart from "react-apexcharts";
-
-//redux
-import { useSelector, useDispatch } from "react-redux";
-import { createSelector } from "reselect";
-
-//actions
-import { getTopSellingProduct } from "../../store/actions";
+import axios from "axios";
 
 const getChartOptions = index => {
   var options = {
@@ -39,30 +33,51 @@ const getChartOptions = index => {
   return options;
 };
 
-const TotalSellngProduct = (props) => {
-  const dispatch = useDispatch();
-
-  const DashboardsaasProperties = createSelector(
-    (state) => state.DashboardSaas,
-    (dashboardSaas) => ({
-      sellingData: dashboardSaas.sellingData,
-    })
-  );
-
-  const {
-    sellingData
-  } = useSelector(DashboardsaasProperties);
-
+const TotalClaimsByParking = (props) => {
+  const [parkingClaims, setParkingClaims] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState("jan");
 
   useEffect(() => {
-    dispatch(getTopSellingProduct("jan"));
-  }, [dispatch]);
+    const fetchClaims = async () => {
+      try {
+        const claimsResponse = await axios.get("http://localhost:3001/api/All_claims");
+        const claims = claimsResponse.data.claims;
 
-  const [seletedMonth, setSeletedMonth] = useState("jan");
+        const parkingClaimCounts = {};
 
-  const onChangeMonth = value => {
-    setSeletedMonth(value);
-    dispatch(getTopSellingProduct(value));
+        for (const claim of claims) {
+          const reservationId = claim.reservationId._id;
+          const reservationResponse = await axios.get(`http://localhost:3001/api/reservation/${reservationId}`);
+          const parkingName = reservationResponse.data.parkingId.name;
+          console.log("Parking Name:", parkingName);
+          console.log("Claim:", claim);
+          console.log("Reservation ID:", reservationId);
+          console.log("Reservation Response:", reservationResponse.data);
+
+          if (!parkingClaimCounts[parkingName]) {
+            parkingClaimCounts[parkingName] = 0;
+          }
+          parkingClaimCounts[parkingName]++;
+        }
+
+        const totalClaims = claims.length;
+        const parkingClaimsData = Object.entries(parkingClaimCounts).map(([parkingName, count]) => ({
+          name: parkingName,
+          desc: "Percentage of Claims",
+          value: ((count / totalClaims) * 100).toFixed(2),
+        }));
+
+        setParkingClaims(parkingClaimsData);
+      } catch (error) {
+        console.error("Error fetching claims or reservations:", error);
+      }
+    };
+
+    fetchClaims();
+  }, [selectedMonth]);
+
+  const onChangeMonth = (value) => {
+    setSelectedMonth(value);
   };
 
   return (
@@ -75,8 +90,8 @@ const TotalSellngProduct = (props) => {
                 <div className="input-group input-group-sm">
                   <select
                     className="form-select form-select-sm"
-                    value={seletedMonth}
-                    onChange={e => {
+                    value={selectedMonth}
+                    onChange={(e) => {
                       onChangeMonth(e.target.value);
                     }}
                   >
@@ -88,25 +103,25 @@ const TotalSellngProduct = (props) => {
                   <label className="input-group-text">Month</label>
                 </div>
               </div>
-              <h4 className="card-title mb-4">Top Selling product</h4>
+              <h4 className="card-title mb-4">Claims by Parking</h4>
             </div>
 
             <div className="text-muted text-center">
-              <p className="mb-2">Product A</p>
-              <h4>$ 6385</h4>
+              <p className="mb-2">Parking Claims</p>
+              <h4>{parkingClaims.reduce((acc, claim) => acc + parseFloat(claim.value), 0).toFixed(2)}%</h4>
               <p className="mt-4 mb-0">
                 <span className="badge badge-soft-success font-size-11 me-2">
                   {" "}
-                  0.6% <i className="mdi mdi-arrow-up" />{" "}
+                  Updated <i className="mdi mdi-arrow-up" />{" "}
                 </span>{" "}
-                From previous period
+                Based on current data
               </p>
             </div>
 
             <div className="table-responsive mt-4">
               <Table className="table align-middle mb-0">
                 <tbody>
-                  {(sellingData || []).map((data, key) => {
+                  {(parkingClaims || []).map((data, key) => {
                     const options = getChartOptions(key + 1);
                     return (
                       <tr key={key}>
@@ -128,7 +143,7 @@ const TotalSellngProduct = (props) => {
                           </div>
                         </td>
                         <td>
-                          <p className="text-muted mb-1">Sales</p>
+                          <p className="text-muted mb-1">Claims</p>
                           <h5 className="mb-0">{data.value} %</h5>
                         </td>
                       </tr>
@@ -144,4 +159,4 @@ const TotalSellngProduct = (props) => {
   );
 };
 
-export default TotalSellngProduct;
+export default TotalClaimsByParking;

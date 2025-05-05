@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
-import { Card, CardBody, Col, Row } from "reactstrap";
-import ReactApexChart from "react-apexcharts";
+import { Card, CardBody, Col, Row, Button,Spinner, } from "reactstrap";
+
 import axios from "axios";
 import ParkingGrowth from "./ParkingGrowth ";
-
+import { saveAs } from "file-saver";
 const CardParkingStats = ({ dataColors }) => {
   const [parkings, setParkings] = useState([]);
   const [pendingParkings, setPendingParkings] = useState([]);
@@ -33,6 +33,101 @@ const CardParkingStats = ({ dataColors }) => {
   const occupancyRate = totalSpots ? ((availableSpots / totalSpots) * 100).toFixed(2) : 0;
 
   const avgHourlyPrice = (parkings.reduce((sum, p) => sum + p.pricing.hourly, 0) / totalParkings).toFixed(2);
+
+
+
+
+
+  //gemini APi
+  const generateParkingReport = async () => {
+    const API_KEY = "AIzaSyBkIMKoI-5wLl2q7EsznL3rUHnd0EiH7CI";
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+
+    try {
+      setLoading(true);
+      // Step 1: Fetch parking data
+      const response = await fetch("http://localhost:3001/parkings/parkings");
+      const parkings = await response.json();
+
+      // Step 2: Calculate statistics
+      const now = new Date();
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(now.getDate() - 7);
+
+      const recentParkings = parkings.filter(p =>
+        new Date(p.createdAt.$date || p.createdAt) > sevenDaysAgo
+      );
+
+      const statusCounts = {
+        accepted: parkings.filter(p => p.status === "accepted").length,
+        pending: parkings.filter(p => p.status === "pending").length,
+        rejected: parkings.filter(p => p.status === "rejected").length,
+      };
+
+      const averageHourlyPrice =
+        parkings.reduce((sum, p) => sum + (p.pricing?.hourly || 0), 0) /
+        parkings.length;
+
+      // Step 3: Build the prompt
+      const prompt = `Generate a professional summary report for the current parking statistics:
+- Total parkings: ${parkings.length}
+- Recently added parkings (last 7 days): ${recentParkings.length}
+- Parking status:
+  - Accepted: ${statusCounts.accepted}
+  - Pending: ${statusCounts.pending}
+  - Rejected: ${statusCounts.rejected}
+- Average hourly parking price: ${averageHourlyPrice.toFixed(2)} TND
+
+Please include insights on recent growth, trends in acceptance, and pricing implications.`;
+
+      const requestBody = {
+        contents: [
+          {
+            parts: [{ text: prompt }],
+          },
+        ],
+      };
+
+      // Step 4: Call Gemini API
+      const aiResponse = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      const data = await aiResponse.json();
+
+      if (data.candidates && data.candidates.length > 0) {
+        const text = data.candidates[0].content.parts[0].text;
+        const blob = new Blob([text], { type: "text/plain;charset=utf-8;" });
+        saveAs(blob, "Parking_Statistics_Report.txt");
+      } else {
+        console.error("Unexpected Gemini response:", data);
+        alert("No content returned from Gemini.");
+      }
+    } catch (err) {
+      console.error("Error generating parking report:", err);
+      alert("Failed to generate parking report.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
+  const [loading, setLoading] = useState(false);
+
+
+
+
+
+
+
+
+
+
 
   // Mock monthly data for chart
   const series = [
@@ -99,8 +194,8 @@ const CardParkingStats = ({ dataColors }) => {
         </Row>
 
         <Row>
-        
-        <Col lg={4}>
+
+          <Col lg={4}>
             <Card className="blog-stats-wid">
               <CardBody>
                 <p className="text-muted mb-2">Avg. Hourly Price</p>
@@ -108,7 +203,7 @@ const CardParkingStats = ({ dataColors }) => {
               </CardBody>
             </Card>
           </Col>
-          
+
           <Col lg={4}>
             <Card className="blog-stats-wid">
               <CardBody>
@@ -116,19 +211,34 @@ const CardParkingStats = ({ dataColors }) => {
                 <h5 className="mb-0">{occupancyRate}%</h5>
               </CardBody>
             </Card>
+
           </Col>
+          <Col lg={4}>
+
+            <div className="text-left mt-4">
+              <Button
+                color="primary"
+                onClick={() => generateParkingReport(setLoading)}
+                disabled={loading}
+                style={{ padding: "10px 20px", fontSize: "16px" }}
+              >
+                {loading ? <Spinner size="sm" /> : "Generate Rapport"}
+              </Button>
+            </div>
+          </Col>
+
         </Row>
 
-       
-         
-      
 
 
-      
-        
-            <ParkingGrowth dataColors='["--bs-primary"]' />
-           
-        
+
+
+
+
+
+        <ParkingGrowth dataColors='["--bs-primary"]' />
+
+
 
       </Col>
     </React.Fragment>
