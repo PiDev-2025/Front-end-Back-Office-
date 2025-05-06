@@ -38,7 +38,7 @@ const generateAIReport = async (setLoading) => {
     setLoading(true);
 
     // Step 1: Fetch live user data
-    const response = await fetch("http://localhost:3001/User/users");
+    const response = await fetch("https://parkini-backend.onrender.com//User/users");
     const users = await response.json();
 
     // Step 2: Calculate statistics

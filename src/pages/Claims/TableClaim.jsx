@@ -10,12 +10,12 @@ const TableClaim = () => {
   const toggleViewModal = () => setViewModal(!viewModal);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/All_claims")
+    fetch("https://parkini-backend.onrender.com//api/All_claims")
       .then(response => response.json())
       .then(async data => {
         const claimsWithReservation = await Promise.all(
           data.claims.map(async claim => {
-            const reservationResponse = await fetch(`http://localhost:3001/api/reservation/${claim.reservationId._id}`);
+            const reservationResponse = await fetch(`https://parkini-backend.onrender.com//api/reservation/${claim.reservationId._id}`);
             const reservationData = await reservationResponse.json();
             return {
               ...claim,

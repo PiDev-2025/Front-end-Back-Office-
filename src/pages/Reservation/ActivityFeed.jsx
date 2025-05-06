@@ -8,13 +8,13 @@ const ActivityFeed = () => {
 
   useEffect(() => {
     // Step 1: Fetch all reservations
-    fetch("http://localhost:3001/api/list-all")
+    fetch("https://parkini-backend.onrender.com//api/list-all")
       .then((res) => res.json())
       .then(async (reservations) => {
         // Step 2: Fetch each reservation's user info
         const activityData = await Promise.all(
           reservations.map(async (reservation) => {
-            const userRes = await fetch(`http://localhost:3001/api/reservations/${reservation._id}/user`);
+            const userRes = await fetch(`https://parkini-backend.onrender.com//api/reservations/${reservation._id}/user`);
             const userData = await userRes.json();
 
             return {

@@ -12,7 +12,7 @@ const ReservationDonutChart = ({ dataColors }) => {
   });
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/list-all")
+    fetch("https://parkini-backend.onrender.com//api/list-all")
       .then((res) => res.json())
       .then((data) => {
         const total = data.length;

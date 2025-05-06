@@ -11,7 +11,7 @@ const TablePendingParking = () => {
 
   // Fetch all pending parking requests
   useEffect(() => {
-    fetch("http://localhost:3001/parkings/requests", {
+    fetch("https://parkini-backend.onrender.com//parkings/requests", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -30,7 +30,7 @@ const TablePendingParking = () => {
 
   // Accept parking request
   const handleAcceptParking = (parkingId) => {
-    fetch(`http://localhost:3001/parkings/requests/${parkingId}`, {
+    fetch(`https://parkini-backend.onrender.com//parkings/requests/${parkingId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -57,7 +57,7 @@ const TablePendingParking = () => {
 
   // Delete parking request
   const handleDeleteParking = (parkingId) => {
-    fetch(`http://localhost:3001/parkings/requests/${parkingId}`, {
+    fetch(`https://parkini-backend.onrender.com//parkings/requests/${parkingId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

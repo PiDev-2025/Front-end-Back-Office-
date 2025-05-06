@@ -19,7 +19,7 @@ const Section = () => {
 
         try {
             setLoading(true);
-            const response = await fetch("http://localhost:3001/api/list-all");
+            const response = await fetch("https://parkini-backend.onrender.com//api/list-all");
             const reservations = await response.json();
 
             // Step 1: Basic statistics

@@ -10,7 +10,7 @@ const ClaimGrowth = ({ dataColors }) => {
   const [selectedMonth, setSelectedMonth] = useState("jan");
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/All_claims")
+    fetch("https://parkini-backend.onrender.com//api/All_claims")
       .then((res) => res.json())
       .then((data) => {
         const monthlyGrowth = {};

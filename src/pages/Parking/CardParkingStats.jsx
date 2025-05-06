@@ -12,12 +12,12 @@ const CardParkingStats = ({ dataColors }) => {
 
   useEffect(() => {
     // Fetch all parkings
-    axios.get("http://localhost:3001/parkings/parkings")
+    axios.get("https://parkini-backend.onrender.com//parkings/parkings")
       .then(response => setParkings(response.data))
       .catch(error => console.error("Error fetching parking data:", error));
 
     // Fetch pending parkings
-    axios.get("http://localhost:3001/parkings/requests")
+    axios.get("https://parkini-backend.onrender.com//parkings/requests")
       .then(response => setPendingParkings(response.data))
       .catch(error => console.error("Error fetching pending parkings:", error));
   }, []);
@@ -46,7 +46,7 @@ const CardParkingStats = ({ dataColors }) => {
     try {
       setLoading(true);
       // Step 1: Fetch parking data
-      const response = await fetch("http://localhost:3001/parkings/parkings");
+      const response = await fetch("https://parkini-backend.onrender.com//parkings/parkings");
       const parkings = await response.json();
 
       // Step 2: Calculate statistics

@@ -13,7 +13,7 @@ const UserDonutChart = ({ dataColors }) => {
   });
 
   useEffect(() => {
-    fetch("http://localhost:3001/User/users")
+    fetch("https://parkini-backend.onrender.com//User/users")
       .then((res) => res.json())
       .then((data) => {
         const totalUsers = data.length;

@@ -19,7 +19,7 @@ const Activity = () => {
   // Fetch latest 3 parkings
   useEffect(() => {
     axios
-      .get("http://localhost:3001/parkings/parkings") // Adjust API endpoint as needed
+      .get("https://parkini-backend.onrender.com//parkings/parkings") // Adjust API endpoint as needed
       .then((response) => {
         const parkings = response.data;
         if (parkings.length > 0) {
