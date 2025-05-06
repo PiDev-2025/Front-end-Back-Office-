@@ -8,7 +8,7 @@ const MiniWidget = () => {
   useEffect(() => {
     const fetchClaims = async () => {
       try {
-        const response = await axios.get("https://parkini-backend.onrender.com//api/All_claims");
+        const response = await axios.get("https://parkini-backend.onrender.com/api/All_claims");
         const claims = response.data.claims;
 
         const stats = [

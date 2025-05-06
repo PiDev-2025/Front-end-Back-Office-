@@ -10,7 +10,7 @@ const UserGrowth = ({ dataColors }) => {
   const [selectedMonth, setSelectedMonth] = useState("jan");
 
   useEffect(() => {
-    fetch("https://parkini-backend.onrender.com//User/users")
+    fetch("https://parkini-backend.onrender.com/User/users")
       .then((res) => res.json())
       .then((data) => {
         const monthlyGrowth = {};

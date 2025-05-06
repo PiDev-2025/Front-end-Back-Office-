@@ -24,7 +24,7 @@ const MapboxMap = () => {
 
   // Fetch parking locations from backend
   useEffect(() => {
-    axios.get("https://parkini-backend.onrender.com//parkings/parkings")
+    axios.get("https://parkini-backend.onrender.com/parkings/parkings")
       .then(response => {
         setParkings(response.data)
       })

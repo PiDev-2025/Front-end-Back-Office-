@@ -40,14 +40,14 @@ const TotalClaimsByParking = (props) => {
   useEffect(() => {
     const fetchClaims = async () => {
       try {
-        const claimsResponse = await axios.get("https://parkini-backend.onrender.com//api/All_claims");
+        const claimsResponse = await axios.get("https://parkini-backend.onrender.com/api/All_claims");
         const claims = claimsResponse.data.claims;
 
         const parkingClaimCounts = {};
 
         for (const claim of claims) {
           const reservationId = claim.reservationId._id;
-          const reservationResponse = await axios.get(`https://parkini-backend.onrender.com//api/reservation/${reservationId}`);
+          const reservationResponse = await axios.get(`https://parkini-backend.onrender.com/api/reservation/${reservationId}`);
           const parkingName = reservationResponse.data.parkingId.name;
           console.log("Parking Name:", parkingName);
           console.log("Claim:", claim);

@@ -36,7 +36,7 @@ const TableUsers = () => {
 
   // Fetch all users
   useEffect(() => {
-    fetch("https://parkini-backend.onrender.com//User/users")
+    fetch("https://parkini-backend.onrender.com/User/users")
       .then(response => response.json())
       .then(data => setUsers(data))
       .catch(error => console.error("Error fetching users:", error));
@@ -68,7 +68,7 @@ const TableUsers = () => {
 
     console.log("Sending user data:", userToSend); // Debug log
     
-    fetch("https://parkini-backend.onrender.com//User/users", {
+    fetch("https://parkini-backend.onrender.com/User/users", {
       method: "POST",
       headers: { 
         "Content-Type": "application/json"
@@ -126,7 +126,7 @@ const TableUsers = () => {
 
     console.log("Sending updated user data:", userToUpdate); // Debug log
     
-    fetch(`https://parkini-backend.onrender.com//User/users/${userToUpdate._id}`, {
+    fetch(`https://parkini-backend.onrender.com/User/users/${userToUpdate._id}`, {
       method: "PUT",
       headers: { 
         "Content-Type": "application/json"
@@ -160,7 +160,7 @@ const TableUsers = () => {
 
   // Delete user function
   const handleDeleteUser = (userId) => {
-    fetch(`https://parkini-backend.onrender.com//User/users/${userId}`, {
+    fetch(`https://parkini-backend.onrender.com/User/users/${userId}`, {
       method: "DELETE",
     })
       .then(() => {

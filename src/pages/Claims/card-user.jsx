@@ -19,7 +19,7 @@ const CardUser = () => {
 
   useEffect(() => {
     axios
-      .get("https://parkini-backend.onrender.com//api/All_claims")
+      .get("https://parkini-backend.onrender.com/api/All_claims")
       .then((response) => {
         const data = response.data;
         if (data.success && Array.isArray(data.claims)) {

@@ -21,7 +21,7 @@ const TapParkings = () => {
     const fetchParkings = async () => {
       try {
         setLoading(true);
-        const response = await fetch("https://parkini-backend.onrender.com//parkings/parkings");
+        const response = await fetch("https://parkini-backend.onrender.com/parkings/parkings");
         const data = await response.json();
 
         if (!Array.isArray(data) || data.length === 0) {

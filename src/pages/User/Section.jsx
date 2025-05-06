@@ -21,7 +21,7 @@ const Section = () => {
             setLoading(true);
 
             // Step 1: Fetch live user data
-            const response = await fetch("https://parkini-backend.onrender.com//User/users");
+            const response = await fetch("https://parkini-backend.onrender.com/User/users");
             const users = await response.json();
 
             // Step 2: Calculate statistics

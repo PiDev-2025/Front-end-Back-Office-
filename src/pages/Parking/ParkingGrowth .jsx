@@ -10,7 +10,7 @@ const ParkingGrowth = ({ dataColors }) => {
   const [selectedMonth, setSelectedMonth] = useState("jan");
 
   useEffect(() => {
-    fetch("https://parkini-backend.onrender.com//parkings/parkings")
+    fetch("https://parkini-backend.onrender.com/parkings/parkings")
       .then((res) => res.json())
       .then((data) => {
         const monthlyGrowth = {};

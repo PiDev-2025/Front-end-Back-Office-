@@ -23,8 +23,8 @@ const StatisticsReservations = () => {
     const fetchStatistics = async () => {
         try {
             const [resRes, resParks] = await Promise.all([
-                fetch('https://parkini-backend.onrender.com//api/list-all').then(res => res.json()),
-                fetch('https://parkini-backend.onrender.com//parkings/parkings').then(res => res.json())
+                fetch('https://parkini-backend.onrender.com/api/list-all').then(res => res.json()),
+                fetch('https://parkini-backend.onrender.com/parkings/parkings').then(res => res.json())
             ]);
 
             const reservationData = resRes;

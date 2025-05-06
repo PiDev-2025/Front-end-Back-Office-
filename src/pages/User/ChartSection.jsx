@@ -10,7 +10,7 @@ const ChartSection = () => {
     });
 
     useEffect(() => {
-        fetch("https://parkini-backend.onrender.com//User/users")
+        fetch("https://parkini-backend.onrender.com/User/users")
             .then((res) => res.json())
             .then((data) => {
                 const totalUsers = data.length;

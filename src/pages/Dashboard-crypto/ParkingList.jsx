@@ -24,7 +24,7 @@ const ParkingList = () => {
   const [regionFilter, setRegionFilter] = useState("");
 
   useEffect(() => {
-    fetch("https://parkini-backend.onrender.com//parkings/parkings")
+    fetch("https://parkini-backend.onrender.com/parkings/parkings")
       .then((res) => res.json())
       .then((data) => {
         setParkings(data);

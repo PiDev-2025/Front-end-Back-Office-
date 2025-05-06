@@ -8,7 +8,7 @@ const PeakReservationHoursChart = ({ dataColors }) => {
   const [hourlyData, setHourlyData] = useState(Array(24).fill(0)); // 0-23 hours
 
   useEffect(() => {
-    fetch("https://parkini-backend.onrender.com//api/list-all")
+    fetch("https://parkini-backend.onrender.com/api/list-all")
       .then((res) => res.json())
       .then((data) => {
         const hourCount = Array(24).fill(0);
