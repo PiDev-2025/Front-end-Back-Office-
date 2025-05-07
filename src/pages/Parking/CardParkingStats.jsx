@@ -199,7 +199,7 @@ Please include insights on recent growth, trends in acceptance, and pricing impl
             <Card className="blog-stats-wid">
               <CardBody>
                 <p className="text-muted mb-2">Avg. Hourly Price</p>
-                <h5 className="mb-0">${avgHourlyPrice}</h5>
+                <h5 className="mb-0">{avgHourlyPrice}DT</h5>
               </CardBody>
             </Card>
           </Col>
